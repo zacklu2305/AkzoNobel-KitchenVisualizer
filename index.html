@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Zack Lu">
+    <meta name="created-by" content="Zack Lu">
+    <title>Kitchen Color Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .overlay-img { transition: opacity 0.3s ease-in-out; opacity: 0; }
+        .overlay-img.visible { opacity: 1; }
+        img {
+            -webkit-touch-callout: none;
+            -webkit-user-drag: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] font-sans text-gray-900 overflow-hidden select-none">
+    <div id="app"></div>
+    <script>
+        console.log('%cBuilt by Zack Lu', 'font-weight:bold; font-size:12px;');
+
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target && e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', (e) => {
+            if (e.target && e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+
+        const models = [{"id":"1791358453203","name":"Kitchen 1","description":"Custom Model","baseImageUrl":"images/kitchen-1_base.jpg","colors":[{"id":"1791358566095hiaifwy","name":"Stain 1","thumbnailUrl":"images/kitchen-1_stain-1_thumb.jpg","imageUrl":"images/kitchen-1_stain-1.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358566123d3l7em2","name":"Stain 2","thumbnailUrl":"images/kitchen-1_stain-2_thumb.jpg","imageUrl":"images/kitchen-1_stain-2.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358566130h7nr9na","name":"Stain 3","thumbnailUrl":"images/kitchen-1_stain-3_thumb.jpg","imageUrl":"images/kitchen-1_stain-3.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358566140rxfcj4l","name":"Stain 4","thumbnailUrl":"images/kitchen-1_stain-4_thumb.jpg","imageUrl":"images/kitchen-1_stain-4.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358566149rm0gyw9","name":"Stain 5","thumbnailUrl":"images/kitchen-1_stain-5_thumb.jpg","imageUrl":"images/kitchen-1_stain-5.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358566161lra55ms","name":"Stain 6","thumbnailUrl":"images/kitchen-1_stain-6_thumb.jpg","imageUrl":"images/kitchen-1_stain-6.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358566187x8fgjhy","name":"Stain 7","thumbnailUrl":"images/kitchen-1_stain-7_thumb.jpg","imageUrl":"images/kitchen-1_stain-7.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358566208e1cmbgc","name":"Stain 8","thumbnailUrl":"images/kitchen-1_stain-8_thumb.jpg","imageUrl":"images/kitchen-1_stain-8.jpg","segmentId":"seg-1791358453203-1"},{"id":"17913585662241hb16lv","name":"Stain 9","thumbnailUrl":"images/kitchen-1_stain-9_thumb.jpg","imageUrl":"images/kitchen-1_stain-9.jpg","segmentId":"seg-1791358453203-1"},{"id":"1791358647313jciijvn","name":"Solid 2","thumbnailUrl":"images/kitchen-1_solid-2_thumb.jpg","imageUrl":"images/kitchen-1_solid-2.jpg","segmentId":"seg-1791358453203-2"},{"id":"17913586473226bhsoet","name":"Solid 3","thumbnailUrl":"images/kitchen-1_solid-3_thumb.jpg","imageUrl":"images/kitchen-1_solid-3.jpg","segmentId":"seg-1791358453203-2"},{"id":"1791358647332kqbz6wz","name":"Solid 4","thumbnailUrl":"images/kitchen-1_solid-4_thumb.jpg","imageUrl":"images/kitchen-1_solid-4.jpg","segmentId":"seg-1791358453203-2"},{"id":"179135864734500ocrsi","name":"Solid 5","thumbnailUrl":"images/kitchen-1_solid-5_thumb.jpg","imageUrl":"images/kitchen-1_solid-5.jpg","segmentId":"seg-1791358453203-2"},{"id":"179135864735751t3mkz","name":"Solid 6","thumbnailUrl":"images/kitchen-1_solid-6_thumb.jpg","imageUrl":"images/kitchen-1_solid-6.jpg","segmentId":"seg-1791358453203-2"},{"id":"1791358647367z2m6e4p","name":"Solid 7","thumbnailUrl":"images/kitchen-1_solid-7_thumb.jpg","imageUrl":"images/kitchen-1_solid-7.jpg","segmentId":"seg-1791358453203-2"},{"id":"1791358647386kwxo8ua","name":"Solid 8","thumbnailUrl":"images/kitchen-1_solid-8_thumb.jpg","imageUrl":"images/kitchen-1_solid-8.jpg","segmentId":"seg-1791358453203-2"},{"id":"1791358647396k45wc2o","name":"Solid 9","thumbnailUrl":"images/kitchen-1_solid-9_thumb.jpg","imageUrl":"images/kitchen-1_solid-9.jpg","segmentId":"seg-1791358453203-2"},{"id":"1791358647403n8z0us9","name":"Solid 10","thumbnailUrl":"images/kitchen-1_solid-10_thumb.jpg","imageUrl":"images/kitchen-1_solid-10.jpg","segmentId":"seg-1791358453203-2"},{"id":"17913586474122cghn0s","name":"Solid 11","thumbnailUrl":"images/kitchen-1_solid-11_thumb.jpg","imageUrl":"images/kitchen-1_solid-11.jpg","segmentId":"seg-1791358453203-2"},{"id":"1791358647420njb0ay5","name":"Solid 12","thumbnailUrl":"images/kitchen-1_solid-12_thumb.jpg","imageUrl":"images/kitchen-1_solid-12.jpg","segmentId":"seg-1791358453203-2"}],"segments":[{"id":"seg-1791358453203-2","name":"Solid"},{"id":"seg-1791358453203-1","name":"Stain"}]},{"id":"1791358465662","name":"Kitchen 2","description":"Custom Model","baseImageUrl":"images/kitchen-2_base.jpg","colors":[{"id":"1791358530092l6l61bd","name":"Stain 1","thumbnailUrl":"images/kitchen-1_stain-1_thumb.jpg","imageUrl":"images/kitchen-2_stain-1.jpg","segmentId":"seg-1791358465662-1"},{"id":"179135853013499jklnc","name":"Stain 2","thumbnailUrl":"images/kitchen-1_stain-2_thumb.jpg","imageUrl":"images/kitchen-2_stain-2.jpg","segmentId":"seg-1791358465662-1"},{"id":"1791358530142hi9h4f6","name":"Stain 3","thumbnailUrl":"images/kitchen-1_stain-3_thumb.jpg","imageUrl":"images/kitchen-2_stain-3.jpg","segmentId":"seg-1791358465662-1"},{"id":"1791358530150zgsinf0","name":"Stain 4","thumbnailUrl":"images/kitchen-1_stain-4_thumb.jpg","imageUrl":"images/kitchen-2_stain-4.jpg","segmentId":"seg-1791358465662-1"},{"id":"17913585301587zgb5rg","name":"Stain 5","thumbnailUrl":"images/kitchen-1_stain-5_thumb.jpg","imageUrl":"images/kitchen-2_stain-5.jpg","segmentId":"seg-1791358465662-1"},{"id":"17913585301673jtm1gz","name":"Stain 6","thumbnailUrl":"images/kitchen-1_stain-6_thumb.jpg","imageUrl":"images/kitchen-2_stain-6.jpg","segmentId":"seg-1791358465662-1"},{"id":"1791358530186q754smq","name":"Stain 7","thumbnailUrl":"images/kitchen-1_stain-7_thumb.jpg","imageUrl":"images/kitchen-2_stain-7.jpg","segmentId":"seg-1791358465662-1"},{"id":"1791358530209mbii1j1","name":"Stain 8","thumbnailUrl":"images/kitchen-1_stain-8_thumb.jpg","imageUrl":"images/kitchen-2_stain-8.jpg","segmentId":"seg-1791358465662-1"},{"id":"1791358530236qkakbbc","name":"Stain 9","thumbnailUrl":"images/kitchen-1_stain-9_thumb.jpg","imageUrl":"images/kitchen-2_stain-9.jpg","segmentId":"seg-1791358465662-1"},{"id":"1791358679651x7mvfjw","name":"Solid 2","thumbnailUrl":"images/kitchen-1_solid-2_thumb.jpg","imageUrl":"images/kitchen-2_solid-2.jpg","segmentId":"seg-1791358465662-2"},{"id":"17913586796765hunsxz","name":"Solid 3","thumbnailUrl":"images/kitchen-1_solid-3_thumb.jpg","imageUrl":"images/kitchen-2_solid-3.jpg","segmentId":"seg-1791358465662-2"},{"id":"1791358679709jgg33nj","name":"Solid 4","thumbnailUrl":"images/kitchen-1_solid-4_thumb.jpg","imageUrl":"images/kitchen-2_solid-4.jpg","segmentId":"seg-1791358465662-2"},{"id":"1791358679736es5vpdk","name":"Solid 5","thumbnailUrl":"images/kitchen-1_solid-5_thumb.jpg","imageUrl":"images/kitchen-2_solid-5.jpg","segmentId":"seg-1791358465662-2"},{"id":"17913586797612j8w2hj","name":"Solid 6","thumbnailUrl":"images/kitchen-1_solid-6_thumb.jpg","imageUrl":"images/kitchen-2_solid-6.jpg","segmentId":"seg-1791358465662-2"},{"id":"1791358679786jisucmt","name":"Solid 7","thumbnailUrl":"images/kitchen-1_solid-7_thumb.jpg","imageUrl":"images/kitchen-2_solid-7.jpg","segmentId":"seg-1791358465662-2"},{"id":"1791358679823y6dtv6z","name":"Solid 8","thumbnailUrl":"images/kitchen-1_solid-8_thumb.jpg","imageUrl":"images/kitchen-2_solid-8.jpg","segmentId":"seg-1791358465662-2"},{"id":"179135867984855up2fk","name":"Solid 9","thumbnailUrl":"images/kitchen-1_solid-9_thumb.jpg","imageUrl":"images/kitchen-2_solid-9.jpg","segmentId":"seg-1791358465662-2"},{"id":"1791358679870vcf4ofb","name":"Solid 10","thumbnailUrl":"images/kitchen-1_solid-10_thumb.jpg","imageUrl":"images/kitchen-2_solid-10.jpg","segmentId":"seg-1791358465662-2"},{"id":"1791358679892pw7lvwn","name":"Solid 11","thumbnailUrl":"images/kitchen-1_solid-11_thumb.jpg","imageUrl":"images/kitchen-2_solid-11.jpg","segmentId":"seg-1791358465662-2"},{"id":"1791358679915zig7iv8","name":"Solid 12","thumbnailUrl":"images/kitchen-1_solid-12_thumb.jpg","imageUrl":"images/kitchen-2_solid-12.jpg","segmentId":"seg-1791358465662-2"}],"segments":[{"id":"seg-1791358465662-2","name":"Solid"},{"id":"seg-1791358465662-1","name":"Stain"}]},{"id":"1791358481086","name":"Kitchen 3","description":"Custom Model","baseImageUrl":"images/kitchen-3_base.jpg","colors":[{"id":"1791358498640nc5rkyx","name":"Stain 1","thumbnailUrl":"images/kitchen-1_stain-1_thumb.jpg","imageUrl":"images/kitchen-3_stain-1.jpg","segmentId":"seg-1791358481086-1"},{"id":"1791358498675d0mm9q2","name":"Stain 2","thumbnailUrl":"images/kitchen-1_stain-2_thumb.jpg","imageUrl":"images/kitchen-3_stain-2.jpg","segmentId":"seg-1791358481086-1"},{"id":"179135849868474h49dw","name":"Stain 3","thumbnailUrl":"images/kitchen-1_stain-3_thumb.jpg","imageUrl":"images/kitchen-3_stain-3.jpg","segmentId":"seg-1791358481086-1"},{"id":"17913584986995eyt14j","name":"Stain 4","thumbnailUrl":"images/kitchen-1_stain-4_thumb.jpg","imageUrl":"images/kitchen-3_stain-4.jpg","segmentId":"seg-1791358481086-1"},{"id":"1791358498708w5zqb8u","name":"Stain 5","thumbnailUrl":"images/kitchen-1_stain-5_thumb.jpg","imageUrl":"images/kitchen-3_stain-5.jpg","segmentId":"seg-1791358481086-1"},{"id":"1791358498718lg3rfq2","name":"Stain 6","thumbnailUrl":"images/kitchen-1_stain-6_thumb.jpg","imageUrl":"images/kitchen-3_stain-6.jpg","segmentId":"seg-1791358481086-1"},{"id":"1791358498730ddxobuw","name":"Stain 7","thumbnailUrl":"images/kitchen-1_stain-7_thumb.jpg","imageUrl":"images/kitchen-3_stain-7.jpg","segmentId":"seg-1791358481086-1"},{"id":"1791358498748vlmuxtr","name":"Stain 8","thumbnailUrl":"images/kitchen-1_stain-8_thumb.jpg","imageUrl":"images/kitchen-3_stain-8.jpg","segmentId":"seg-1791358481086-1"},{"id":"1791358498772d2pcemb","name":"Stain 9","thumbnailUrl":"images/kitchen-1_stain-9_thumb.jpg","imageUrl":"images/kitchen-3_stain-9.jpg","segmentId":"seg-1791358481086-1"},{"id":"179135870988827hy8jl","name":"Solid 2","thumbnailUrl":"images/kitchen-1_solid-2_thumb.jpg","imageUrl":"images/kitchen-3_solid-2.jpg","segmentId":"seg-1791358481086-2"},{"id":"1791358709899xtuu7dh","name":"Solid 3","thumbnailUrl":"images/kitchen-1_solid-3_thumb.jpg","imageUrl":"images/kitchen-3_solid-3.jpg","segmentId":"seg-1791358481086-2"},{"id":"1791358709913pk3cya0","name":"Solid 4","thumbnailUrl":"images/kitchen-1_solid-4_thumb.jpg","imageUrl":"images/kitchen-3_solid-4.jpg","segmentId":"seg-1791358481086-2"},{"id":"179135870992664mxw1z","name":"Solid 5","thumbnailUrl":"images/kitchen-1_solid-5_thumb.jpg","imageUrl":"images/kitchen-3_solid-5.jpg","segmentId":"seg-1791358481086-2"},{"id":"17913587099351s25si5","name":"Solid 6","thumbnailUrl":"images/kitchen-1_solid-6_thumb.jpg","imageUrl":"images/kitchen-3_solid-6.jpg","segmentId":"seg-1791358481086-2"},{"id":"1791358709944z4pig6r","name":"Solid 7","thumbnailUrl":"images/kitchen-1_solid-7_thumb.jpg","imageUrl":"images/kitchen-3_solid-7.jpg","segmentId":"seg-1791358481086-2"},{"id":"17913587099675row5ga","name":"Solid 8","thumbnailUrl":"images/kitchen-1_solid-8_thumb.jpg","imageUrl":"images/kitchen-3_solid-8.jpg","segmentId":"seg-1791358481086-2"},{"id":"1791358709977vnunt55","name":"Solid 9","thumbnailUrl":"images/kitchen-1_solid-9_thumb.jpg","imageUrl":"images/kitchen-3_solid-9.jpg","segmentId":"seg-1791358481086-2"},{"id":"1791358709985wsm7j7l","name":"Solid 10","thumbnailUrl":"images/kitchen-1_solid-10_thumb.jpg","imageUrl":"images/kitchen-3_solid-10.jpg","segmentId":"seg-1791358481086-2"},{"id":"1791358709992oql6j00","name":"Solid 11","thumbnailUrl":"images/kitchen-1_solid-11_thumb.jpg","imageUrl":"images/kitchen-3_solid-11.jpg","segmentId":"seg-1791358481086-2"},{"id":"1791358710001tb1aqrs","name":"Solid 12","thumbnailUrl":"images/kitchen-1_solid-12_thumb.jpg","imageUrl":"images/kitchen-3_solid-12.jpg","segmentId":"seg-1791358481086-2"}],"segments":[{"id":"seg-1791358481086-2","name":"Solid"},{"id":"seg-1791358481086-1","name":"Stain"}]}];
+
+        // Preload images for smoother transitions
+        models.forEach(model => {
+            new Image().src = model.baseImageUrl;
+            model.colors.forEach(color => {
+                new Image().src = color.imageUrl;
+                new Image().src = color.thumbnailUrl;
+            });
+        });
+
+        let activeModelId = null;
+        let selectedColorId = null;
+        let selectedSegmentId = null;
+
+        function render() {
+            const app = document.getElementById('app');
+            if (!activeModelId) { renderScreen1(app); } else { renderScreen2(app); }
+        }
+
+        function renderScreen1(container) {
+            container.innerHTML = `
+                <div class="relative w-full h-screen flex flex-col items-center justify-center p-6">
+                    <div class="absolute inset-0 z-0 overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, #64748b 1px, transparent 0); background-size: 40px 40px; filter: blur(4px);"></div>
+                        <div class="absolute inset-0 bg-slate-400/5 backdrop-blur-[100px]"></div>
+                    </div>
+                    <div class="relative z-10 text-center mb-12 fade-in">
+                        <div class="mb-2">
+                            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tight text-gray-900 leading-none">Kitchen Visualizer</h1>
+                        </div>
+                        <h2 class="text-sm font-bold tracking-[0.4em] text-gray-400 uppercase">Select a Kitchen Model</h2>
+                        <p class="text-gray-400 text-[10px] mt-4 uppercase tracking-widest opacity-60">Choose a layout to start customizing</p>
+                    </div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-6xl w-full overflow-y-auto max-h-[70vh] no-scrollbar fade-in">
+                        ${models.map(model => `
+                            <div onclick="selectModel('${model.id}')" class="group cursor-pointer bg-white p-4 rounded-2xl shadow-sm border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1">
+                                <div class="aspect-[16/10] bg-slate-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                                    <img src="${model.baseImageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="flex justify-between items-center px-1">
+                                    <span class="text-sm font-semibold tracking-wide uppercase">${model.name}</span>
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-tighter">${model.description}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="absolute bottom-6 left-0 right-0 text-center z-10">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-300">Developed by Zack Lu</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderScreen2(container) {
+            const model = models.find(m => m.id === activeModelId);
+            const segs = model.segments || [];
+            const withColors = segs.filter(s => model.colors.some(c => (c.segmentId || c.segment) === s.id));
+            if (!selectedSegmentId || !withColors.some(s => s.id === selectedSegmentId)) {
+                selectedSegmentId = withColors[0] ? withColors[0].id : (segs[0] ? segs[0].id : '');
+            }
+            const visibleColors = model.colors.filter(c => (c.segmentId || c.segment) === selectedSegmentId);
+
+            let toggleHtml = '';
+            if (withColors.length > 1) {
+                toggleHtml = '<div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full py-0.5"><div class="flex items-center bg-gray-100 p-0.5 rounded-lg text-xs font-semibold flex-nowrap">' +
+                    withColors.map(s => {
+                        const active = selectedSegmentId === s.id ? 'bg-white text-black shadow-sm font-bold' : 'text-gray-500 hover:text-black';
+                        return '<button onclick="switchSegment(\'' + s.id + '\')" class="px-3 py-1 rounded-md transition-all text-[11px] whitespace-nowrap ' + active + '">' + s.name + '</button>';
+                    }).join('') +
+                    '</div></div>';
+            }
+
+            container.innerHTML = `
+                <div class="fixed inset-0 w-full h-full bg-white flex flex-col fade-in">
+                    <header class="h-20 border-b border-gray-100 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md z-10">
+                        <div class="flex items-center gap-6">
+                            <button onclick="back()" class="p-2 -ml-2 text-gray-500 hover:text-black transition-colors">
+                                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <div class="h-6 w-px bg-gray-200"></div>
+                            <h2 class="font-medium text-lg tracking-tight">${model.name}</h2>
+                        </div>
+                        <button onclick="resetColor()" class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400 hover:text-black transition-colors">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            Reset to original
+                        </button>
+                    </header>
+                    <main class="flex-1 relative bg-gray-100 overflow-hidden flex items-center justify-center p-4 md:p-8">
+                        <div class="relative w-full h-full flex items-center justify-center">
+                            <img src="${model.baseImageUrl}" class="max-w-full max-h-full w-auto h-auto object-contain block rounded-lg shadow-lg">
+                            <img id="overlay-layer" src="" class="overlay-img absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg">
+                        </div>
+                        <div class="absolute bottom-4 left-0 right-0 text-center z-10 pointer-events-none">
+                            <p class="text-[9px] font-bold uppercase tracking-[0.4em] text-gray-400 opacity-50">Developed by Zack Lu</p>
+                        </div>
+                    </main>
+                    <footer class="h-36 bg-white border-t border-gray-100 flex flex-col justify-center px-8 md:px-12 gap-2 overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 hidden md:block">Cabinet Finish</span>
+                            ${toggleHtml}
+                        </div>
+                        <div id="swatch-container" class="flex gap-4 overflow-x-auto py-1 no-scrollbar items-center">
+                            ${visibleColors.length === 0 ? '<div class="text-gray-300 text-sm italic">No variants.</div>' : visibleColors.map(c => `
+                                <button id="swatch-${c.id}" onclick="selectColor('${c.id}')" class="relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition-all group ring-1 ring-gray-100">
+                                    <img src="${c.thumbnailUrl}" class="w-full h-full object-contain bg-gray-50">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </footer>
+                </div>
+            `;
+            if (selectedColorId) {
+                const color = model.colors.find(c => c.id === selectedColorId);
+                if (color) {
+                    const overlay = document.getElementById('overlay-layer');
+                    overlay.src = color.imageUrl;
+                    overlay.classList.add('visible');
+                    updateSwatchUI(selectedColorId);
+                }
+            }
+        }
+
+        function selectModel(id) { 
+            activeModelId = id; 
+            selectedColorId = null;
+            const model = models.find(m => m.id === id);
+            if (model) {
+                const segs = model.segments || [];
+                const withColors = segs.filter(s => model.colors.some(c => (c.segmentId || c.segment) === s.id));
+                selectedSegmentId = withColors[0] ? withColors[0].id : (segs[0] ? segs[0].id : '');
+            }
+            render(); 
+        }
+        function back() { activeModelId = null; selectedColorId = null; selectedSegmentId = null; render(); }
+        
+        function switchSegment(segId) {
+            if (selectedSegmentId !== segId) {
+                selectedSegmentId = segId;
+                resetColor();
+                const app = document.getElementById('app');
+                renderScreen2(app);
+            }
+        }
+
+        function selectColor(id) {
+            selectedColorId = id;
+            const model = models.find(m => m.id === activeModelId);
+            const color = model.colors.find(c => c.id === id);
+            if (color) {
+                updateOverlay(color.imageUrl);
+                updateSwatchUI(id);
+            }
+        }
+
+        function resetColor() {
+            selectedColorId = null;
+            updateOverlay(null);
+            updateSwatchUI(null);
+        }
+
+        function updateOverlay(url) {
+            const overlay = document.getElementById('overlay-layer');
+            if (!overlay) return;
+            
+            overlay.classList.remove('visible');
+            if (!url) {
+                setTimeout(() => { if (!selectedColorId) overlay.src = ""; }, 300);
+                return;
+            }
+
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                overlay.src = url;
+                overlay.classList.add('visible');
+            };
+            tempImg.src = url;
+        }
+
+        function updateSwatchUI(id) {
+            const model = models.find(m => m.id === activeModelId);
+            if (!model) return;
+            model.colors.forEach(c => {
+                const el = document.getElementById(`swatch-${c.id}`);
+                if (el) {
+                    if (c.id === id) {
+                        el.className = "relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition-all group ring-2 ring-black ring-offset-2 shadow-lg";
+                    } else {
+                        el.className = "relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition-all group ring-1 ring-gray-100";
+                    }
+                }
+            });
+        }
+
+        render();
+    </script>
+</body>
+</html>
