@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Zack Lu">
+    <meta name="created-by" content="Zack Lu">
+    <title>Kitchen Color Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes swatchFade { from { opacity: 0; } to { opacity: 1; } }
+        .swatch-fade { animation: swatchFade 0.2s ease-out forwards; }
+        .overlay-img { transition: opacity 0.3s ease-in-out; opacity: 0; }
+        .overlay-img.visible { opacity: 1; }
+        img {
+            -webkit-touch-callout: none;
+            -webkit-user-drag: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] font-sans text-gray-900 overflow-hidden select-none">
+    <div id="app"></div>
+    <script>
+        console.log('%cBuilt by Zack Lu', 'font-weight:bold; font-size:12px;');
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target && e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', (e) => {
+            if (e.target && e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+        const models = [{"id":"model-1791440570051-fcrvm","name":"Kitchen 1","description":"Imported Kitchen Model","baseImageUrl":"images/kitchen-1_base.jpg","segments":[{"id":"seg-1791440569445-aafj2","name":"Solid"},{"id":"seg-1791440569445-hfh1j","name":"Stain"}],"colors":[{"id":"1791440569480-6r91gfj","name":"Solid 2","thumbnailUrl":"images/kitchen-1_solid-2_thumb.jpg","imageUrl":"images/kitchen-1_solid-2.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569514-em3xmai","name":"Solid 3","thumbnailUrl":"images/kitchen-1_solid-3_thumb.jpg","imageUrl":"images/kitchen-1_solid-3.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569548-rw0c4yx","name":"Solid 4","thumbnailUrl":"images/kitchen-1_solid-4_thumb.jpg","imageUrl":"images/kitchen-1_solid-4.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569580-hc87mcb","name":"Solid 5","thumbnailUrl":"images/kitchen-1_solid-5_thumb.jpg","imageUrl":"images/kitchen-1_solid-5.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569613-gf9mh0b","name":"Solid 6","thumbnailUrl":"images/kitchen-1_solid-6_thumb.jpg","imageUrl":"images/kitchen-1_solid-6.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569653-vnqro2d","name":"Solid 7","thumbnailUrl":"images/kitchen-1_solid-7_thumb.jpg","imageUrl":"images/kitchen-1_solid-7.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569678-f9ttawp","name":"Solid 8","thumbnailUrl":"images/kitchen-1_solid-8_thumb.jpg","imageUrl":"images/kitchen-1_solid-8.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569700-chuaw93","name":"Solid 9","thumbnailUrl":"images/kitchen-1_solid-9_thumb.jpg","imageUrl":"images/kitchen-1_solid-9.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569721-wt7qrn5","name":"Solid 10","thumbnailUrl":"images/kitchen-1_solid-10_thumb.jpg","imageUrl":"images/kitchen-1_solid-10.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569745-t80e780","name":"Solid 11","thumbnailUrl":"images/kitchen-1_solid-11_thumb.jpg","imageUrl":"images/kitchen-1_solid-11.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569769-myooclw","name":"Solid 12","thumbnailUrl":"images/kitchen-1_solid-12_thumb.jpg","imageUrl":"images/kitchen-1_solid-12.jpg","segmentId":"seg-1791440569445-aafj2"},{"id":"1791440569798-kd6gbwl","name":"Stain 1","thumbnailUrl":"images/kitchen-1_stain-1_thumb.jpg","imageUrl":"images/kitchen-1_stain-1.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440569842-97w8n6c","name":"Stain 2","thumbnailUrl":"images/kitchen-1_stain-2_thumb.jpg","imageUrl":"images/kitchen-1_stain-2.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440569863-2vwaz3q","name":"Stain 3","thumbnailUrl":"images/kitchen-1_stain-3_thumb.jpg","imageUrl":"images/kitchen-1_stain-3.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440569884-5j9ga0v","name":"Stain 4","thumbnailUrl":"images/kitchen-1_stain-4_thumb.jpg","imageUrl":"images/kitchen-1_stain-4.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440569913-98mg6ta","name":"Stain 5","thumbnailUrl":"images/kitchen-1_stain-5_thumb.jpg","imageUrl":"images/kitchen-1_stain-5.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440569937-joymtwy","name":"Stain 6","thumbnailUrl":"images/kitchen-1_stain-6_thumb.jpg","imageUrl":"images/kitchen-1_stain-6.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440569981-7qal2rb","name":"Stain 7","thumbnailUrl":"images/kitchen-1_stain-7_thumb.jpg","imageUrl":"images/kitchen-1_stain-7.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440570018-2jd471r","name":"Stain 8","thumbnailUrl":"images/kitchen-1_stain-8_thumb.jpg","imageUrl":"images/kitchen-1_stain-8.jpg","segmentId":"seg-1791440569445-hfh1j"},{"id":"1791440570051-a7dhmpi","name":"Stain 9","thumbnailUrl":"images/kitchen-1_stain-9_thumb.jpg","imageUrl":"images/kitchen-1_stain-9.jpg","segmentId":"seg-1791440569445-hfh1j"}]},{"id":"model-1791440570642-kk6qx","name":"Kitchen 2","description":"Imported Kitchen Model","baseImageUrl":"images/kitchen-2_base.jpg","segments":[{"id":"seg-1791440570075-a60b7","name":"Solid"},{"id":"seg-1791440570075-w8cju","name":"Stain"}],"colors":[{"id":"1791440570100-ofh8gad","name":"Solid 2","thumbnailUrl":"images/kitchen-1_solid-2_thumb.jpg","imageUrl":"images/kitchen-2_solid-2.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570127-fimpn8w","name":"Solid 3","thumbnailUrl":"images/kitchen-1_solid-3_thumb.jpg","imageUrl":"images/kitchen-2_solid-3.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570160-5s9lg9j","name":"Solid 4","thumbnailUrl":"images/kitchen-1_solid-4_thumb.jpg","imageUrl":"images/kitchen-2_solid-4.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570183-59zkx45","name":"Solid 5","thumbnailUrl":"images/kitchen-1_solid-5_thumb.jpg","imageUrl":"images/kitchen-2_solid-5.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570206-3k3cntv","name":"Solid 6","thumbnailUrl":"images/kitchen-1_solid-6_thumb.jpg","imageUrl":"images/kitchen-2_solid-6.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570233-1fft8y1","name":"Solid 7","thumbnailUrl":"images/kitchen-1_solid-7_thumb.jpg","imageUrl":"images/kitchen-2_solid-7.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570259-tkulu6n","name":"Solid 8","thumbnailUrl":"images/kitchen-1_solid-8_thumb.jpg","imageUrl":"images/kitchen-2_solid-8.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570285-v1su8sf","name":"Solid 9","thumbnailUrl":"images/kitchen-1_solid-9_thumb.jpg","imageUrl":"images/kitchen-2_solid-9.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570308-pgsw6s9","name":"Solid 10","thumbnailUrl":"images/kitchen-1_solid-10_thumb.jpg","imageUrl":"images/kitchen-2_solid-10.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570334-7jauq60","name":"Solid 11","thumbnailUrl":"images/kitchen-1_solid-11_thumb.jpg","imageUrl":"images/kitchen-2_solid-11.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570359-m05yzzs","name":"Solid 12","thumbnailUrl":"images/kitchen-1_solid-12_thumb.jpg","imageUrl":"images/kitchen-2_solid-12.jpg","segmentId":"seg-1791440570075-a60b7"},{"id":"1791440570380-2zzzgr0","name":"Stain 1","thumbnailUrl":"images/kitchen-1_stain-1_thumb.jpg","imageUrl":"images/kitchen-2_stain-1.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570423-ox8othr","name":"Stain 2","thumbnailUrl":"images/kitchen-1_stain-2_thumb.jpg","imageUrl":"images/kitchen-2_stain-2.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570449-ls72oju","name":"Stain 3","thumbnailUrl":"images/kitchen-1_stain-3_thumb.jpg","imageUrl":"images/kitchen-2_stain-3.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570472-e5iidmg","name":"Stain 4","thumbnailUrl":"images/kitchen-1_stain-4_thumb.jpg","imageUrl":"images/kitchen-2_stain-4.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570504-sez3glm","name":"Stain 5","thumbnailUrl":"images/kitchen-1_stain-5_thumb.jpg","imageUrl":"images/kitchen-2_stain-5.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570536-qi3e33w","name":"Stain 6","thumbnailUrl":"images/kitchen-1_stain-6_thumb.jpg","imageUrl":"images/kitchen-2_stain-6.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570577-o5dagxy","name":"Stain 7","thumbnailUrl":"images/kitchen-1_stain-7_thumb.jpg","imageUrl":"images/kitchen-2_stain-7.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570609-8ekapjy","name":"Stain 8","thumbnailUrl":"images/kitchen-1_stain-8_thumb.jpg","imageUrl":"images/kitchen-2_stain-8.jpg","segmentId":"seg-1791440570075-w8cju"},{"id":"1791440570642-33bpr86","name":"Stain 9","thumbnailUrl":"images/kitchen-1_stain-9_thumb.jpg","imageUrl":"images/kitchen-2_stain-9.jpg","segmentId":"seg-1791440570075-w8cju"}]},{"id":"model-1791440571081-knh5f","name":"Kitchen 3","description":"Imported Kitchen Model","baseImageUrl":"images/kitchen-3_base.jpg","segments":[{"id":"seg-1791440570666-ck421","name":"Solid"},{"id":"seg-1791440570666-oy6yy","name":"Stain"}],"colors":[{"id":"1791440570688-54mrxfr","name":"Solid 2","thumbnailUrl":"images/kitchen-1_solid-2_thumb.jpg","imageUrl":"images/kitchen-3_solid-2.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570712-o6ksfb9","name":"Solid 3","thumbnailUrl":"images/kitchen-1_solid-3_thumb.jpg","imageUrl":"images/kitchen-3_solid-3.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570735-rn64uic","name":"Solid 4","thumbnailUrl":"images/kitchen-1_solid-4_thumb.jpg","imageUrl":"images/kitchen-3_solid-4.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570760-8exv169","name":"Solid 5","thumbnailUrl":"images/kitchen-1_solid-5_thumb.jpg","imageUrl":"images/kitchen-3_solid-5.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570784-3prpd7j","name":"Solid 6","thumbnailUrl":"images/kitchen-1_solid-6_thumb.jpg","imageUrl":"images/kitchen-3_solid-6.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570808-y3od9yb","name":"Solid 7","thumbnailUrl":"images/kitchen-1_solid-7_thumb.jpg","imageUrl":"images/kitchen-3_solid-7.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570831-kxwwqqz","name":"Solid 8","thumbnailUrl":"images/kitchen-1_solid-8_thumb.jpg","imageUrl":"images/kitchen-3_solid-8.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570849-xcpddqz","name":"Solid 9","thumbnailUrl":"images/kitchen-1_solid-9_thumb.jpg","imageUrl":"images/kitchen-3_solid-9.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570865-ytvb7st","name":"Solid 10","thumbnailUrl":"images/kitchen-1_solid-10_thumb.jpg","imageUrl":"images/kitchen-3_solid-10.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570884-gum8zfp","name":"Solid 11","thumbnailUrl":"images/kitchen-1_solid-11_thumb.jpg","imageUrl":"images/kitchen-3_solid-11.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570902-i3n9awx","name":"Solid 12","thumbnailUrl":"images/kitchen-1_solid-12_thumb.jpg","imageUrl":"images/kitchen-3_solid-12.jpg","segmentId":"seg-1791440570666-ck421"},{"id":"1791440570921-ngdm02h","name":"Stain 1","thumbnailUrl":"images/kitchen-1_stain-1_thumb.jpg","imageUrl":"images/kitchen-3_stain-1.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440570949-9qxd4an","name":"Stain 2","thumbnailUrl":"images/kitchen-1_stain-2_thumb.jpg","imageUrl":"images/kitchen-3_stain-2.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440570968-deyjby5","name":"Stain 3","thumbnailUrl":"images/kitchen-1_stain-3_thumb.jpg","imageUrl":"images/kitchen-3_stain-3.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440570984-t16ic68","name":"Stain 4","thumbnailUrl":"images/kitchen-1_stain-4_thumb.jpg","imageUrl":"images/kitchen-3_stain-4.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440571002-fx1h2il","name":"Stain 5","thumbnailUrl":"images/kitchen-1_stain-5_thumb.jpg","imageUrl":"images/kitchen-3_stain-5.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440571022-sckx9bd","name":"Stain 6","thumbnailUrl":"images/kitchen-1_stain-6_thumb.jpg","imageUrl":"images/kitchen-3_stain-6.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440571045-jwz4bcd","name":"Stain 7","thumbnailUrl":"images/kitchen-1_stain-7_thumb.jpg","imageUrl":"images/kitchen-3_stain-7.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440571063-es2nzop","name":"Stain 8","thumbnailUrl":"images/kitchen-1_stain-8_thumb.jpg","imageUrl":"images/kitchen-3_stain-8.jpg","segmentId":"seg-1791440570666-oy6yy"},{"id":"1791440571081-9ll1zed","name":"Stain 9","thumbnailUrl":"images/kitchen-1_stain-9_thumb.jpg","imageUrl":"images/kitchen-3_stain-9.jpg","segmentId":"seg-1791440570666-oy6yy"}]}];
+        // Preload images for smoother transitions
+        models.forEach(model => {
+            new Image().src = model.baseImageUrl;
+            model.colors.forEach(color => {
+                new Image().src = color.imageUrl;
+                new Image().src = color.thumbnailUrl;
+            });
+        });
+        let activeModelId = null;
+        let selectedColorId = null;
+        let previousColorId = null;
+        let selectedSegmentId = null;
+        let isCompareActive = false;
+        let compareLeftColorId = null;
+        let compareRightColorId = null;
+        let compareTargetSide = null;
+        let comparePos = 50;
+        let isDraggingCompare = false;
+
+        function render() {
+            const app = document.getElementById('app');
+            if (!activeModelId) { renderScreen1(app); } else { renderScreen2(app); }
+        }
+
+        function renderScreen1(container) {
+            container.innerHTML = `
+                <div class="relative w-full h-screen flex flex-col items-center justify-center p-6">
+                    <div class="absolute inset-0 z-0 overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, #64748b 1px, transparent 0); background-size: 40px 40px; filter: blur(4px);"></div>
+                        <div class="absolute inset-0 bg-slate-400/5 backdrop-blur-[100px]"></div>
+                    </div>
+                    <div class="relative z-10 text-center mb-12 fade-in">
+                        <div class="mb-2">
+                            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tight text-gray-900 leading-none">Kitchen Visualizer</h1>
+                        </div>
+                        <h2 class="text-sm font-bold tracking-[0.4em] text-gray-400 uppercase">Select a Kitchen Model</h2>
+                        <p class="text-gray-400 text-[10px] mt-4 uppercase tracking-widest opacity-60">Choose a layout to start customizing</p>
+                    </div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-6xl w-full overflow-y-auto max-h-[70vh] no-scrollbar fade-in">
+                        ${models.map(model => `
+                            <div onclick="selectModel('${model.id}')" class="group cursor-pointer bg-white p-4 rounded-2xl shadow-sm border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1">
+                                <div class="aspect-[16/10] bg-slate-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                                    <img src="${model.baseImageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="flex justify-between items-center px-1">
+                                    <span class="text-sm font-semibold tracking-wide uppercase">${model.name}</span>
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-tighter">${model.description}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="absolute bottom-6 left-0 right-0 text-center z-10">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-300">Developed by Zack Lu</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getSegmentToggleHtml(model) {
+            const segs = model.segments || [];
+            const withColors = segs.filter(s => model.colors.some(c => (c.segmentId || c.segment) === s.id));
+            if (withColors.length <= 1) return '';
+            return '<div class="flex items-center bg-gray-100 p-0.5 rounded-full text-xs font-semibold flex-nowrap">' +
+                withColors.map(s => {
+                    const active = selectedSegmentId === s.id ? 'bg-white text-black shadow-sm font-bold' : 'text-gray-500 hover:text-black';
+                    return '<button onclick="switchSegment(\'' + s.id + '\')" class="px-3 py-1 rounded-full transition-all text-[11px] whitespace-nowrap ' + active + '">' + s.name + '</button>';
+                }).join('') +
+                '</div>';
+        }
+
+        function getSwatchesHtml(model) {
+            const visibleColors = model.colors.filter(c => (c.segmentId || c.segment) === selectedSegmentId);
+            if (visibleColors.length === 0) {
+                return '<div class="text-gray-300 text-sm italic">No variants.</div>';
+            }
+            return visibleColors.map(c => {
+                const isBefore = isCompareActive && (c.id === compareLeftColorId);
+                const isAfter = isCompareActive && (c.id === compareRightColorId);
+                let isRing = false;
+                if (!isCompareActive) {
+                    isRing = (c.id === selectedColorId);
+                } else {
+                    isRing = (compareTargetSide === 'left') ? isBefore : isAfter;
+                }
+                const ringClass = isRing ? 'ring-2 ring-black ring-offset-2 shadow-lg' : 'ring-1 ring-gray-100';
+
+                let badgesHtml = '';
+                if (isCompareActive && (isBefore || isAfter)) {
+                    badgesHtml = '<div class="absolute top-1 left-1 flex items-center gap-0.5 z-10 pointer-events-none">' +
+                        (isBefore ? '<span class="w-4 h-4 rounded-full bg-black/80 text-white text-[9px] font-bold flex items-center justify-center shadow">B</span>' : '') +
+                        (isAfter ? '<span class="w-4 h-4 rounded-full bg-black/80 text-white text-[9px] font-bold flex items-center justify-center shadow">A</span>' : '') +
+                        '</div>';
+                }
+
+                return '<button id="swatch-' + c.id + '" onclick="selectColor(\'' + c.id + '\')" class="relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition-all group ' + ringClass + '">' +
+                '<img src="' + c.thumbnailUrl + '" class="w-full h-full object-contain bg-gray-50">' +
+                '<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>' +
+                badgesHtml +
+                '</button>';
+            }).join('');
+        }
+
+        function renderScreen2(container) {
+            const model = models.find(m => m.id === activeModelId);
+            const segs = model.segments || [];
+            const withColors = segs.filter(s => model.colors.some(c => (c.segmentId || c.segment) === s.id));
+            if (!selectedSegmentId || !withColors.some(s => s.id === selectedSegmentId)) {
+                selectedSegmentId = withColors[0] ? withColors[0].id : (segs[0] ? segs[0].id : '');
+            }
+            container.innerHTML = `
+                <div class="fixed inset-0 w-full h-full bg-white flex flex-col fade-in">
+                    <header class="h-20 border-b border-gray-100 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md z-10">
+                        <div class="flex items-center gap-6">
+                            <button onclick="back()" class="p-2 -ml-2 text-gray-500 hover:text-black transition-colors rounded-full">
+                                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <div class="h-6 w-px bg-gray-200"></div>
+                            <h2 class="font-medium text-lg tracking-tight">${model.name}</h2>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button id="compare-btn" onclick="toggleCompare()" class="hidden flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-400 hover:text-black transition-colors rounded-full">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 3v18M8 8l-4 4 4 4M16 8l4 4-4 4" />
+                                </svg>
+                                Compare
+                            </button>
+                            <div id="compare-controls" style="display: none;" class="flex items-center gap-1.5">
+                                <div class="flex items-center bg-gray-100 p-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider">
+                                    <button id="compare-side-before-btn" onclick="setCompareTargetSide('left')" class="px-2.5 py-1 rounded-full transition-all text-gray-500 hover:text-black">
+                                        Before
+                                    </button>
+                                    <button id="compare-side-after-btn" onclick="setCompareTargetSide('right')" class="px-2.5 py-1 rounded-full transition-all text-gray-500 hover:text-black">
+                                        After
+                                    </button>
+                                </div>
+                                <button id="compare-side-orig-btn" onclick="resetBeforeToOriginal()" class="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-full border border-gray-200 text-gray-500 hover:text-black hover:border-black transition-all">
+                                    Original
+                                </button>
+                            </div>
+                            <button id="reset-main-btn" onclick="resetColor()" class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400 hover:text-black transition-colors rounded-full">
+                                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                Reset to original
+                            </button>
+                        </div>
+                    </header>
+                    <main class="flex-1 relative bg-gray-100 overflow-hidden flex items-center justify-center p-4 md:p-8">
+                        <div id="image-stage" class="relative w-full h-full flex items-center justify-center">
+                            <img id="base-img" src="${model.baseImageUrl}" class="max-w-full max-h-full w-auto h-auto object-contain block rounded-lg shadow-lg select-none pointer-events-none" onload="updateCompareRect()">
+                            <img id="overlay-layer" src="" class="overlay-img absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg select-none pointer-events-none">
+                            <img id="compare-left-overlay" src="" style="display: none;" class="overlay-img absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg select-none pointer-events-none">
+                            <img id="compare-right-overlay" src="" style="display: none;" class="overlay-img absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg select-none pointer-events-none">
+                            <div id="compare-container" style="display: none; touch-action: none;" class="absolute rounded-lg overflow-hidden select-none cursor-ew-resize z-20">
+                                <span id="label-before" onclick="event.stopPropagation(); setCompareTargetSide('left');" class="cursor-pointer pointer-events-auto absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-white text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 hover:bg-black/80 transition-colors">Before</span>
+                                <span id="label-after" onclick="event.stopPropagation(); setCompareTargetSide('right');" class="cursor-pointer pointer-events-auto absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 hover:bg-black/80 transition-colors">After</span>
+                                <div id="compare-divider" class="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_4px_rgba(0,0,0,0.6)] pointer-events-none" style="left: 50%; transform: translateX(-50%);">
+                                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center pointer-events-auto">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" strokeLinecap="round" strokeLinejoin="round" class="text-gray-700">
+                                            <polyline points="8 15 5 12 8 9"></polyline>
+                                            <polyline points="16 9 19 12 16 15"></polyline>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-4 left-0 right-0 text-center z-10 pointer-events-none">
+                            <p class="text-[9px] font-bold uppercase tracking-[0.4em] text-gray-400 opacity-50">Developed by Zack Lu</p>
+                        </div>
+                    </main>
+                    <footer class="h-36 bg-white border-t border-gray-100 flex flex-col justify-center px-8 md:px-12 gap-2 overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 hidden md:block">Cabinet Finish</span>
+                            <div id="segment-toggle-container" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full py-0.5">
+                                ${getSegmentToggleHtml(model)}
+                            </div>
+                        </div>
+                        <div id="swatch-container" class="flex gap-4 overflow-x-auto py-1 no-scrollbar items-center">
+                            ${getSwatchesHtml(model)}
+                        </div>
+                    </footer>
+                </div>
+            `;
+            setupCompareEvents();
+            syncCompareUI();
+        }
+
+        function selectModel(id) {
+            activeModelId = id;
+            selectedColorId = null;
+            previousColorId = null;
+            selectedSegmentId = null;
+            isCompareActive = false;
+            compareLeftColorId = null;
+            compareRightColorId = null;
+            compareTargetSide = null;
+            const model = models.find(m => m.id === id);
+            const segs = model.segments || [];
+            const withColors = segs.filter(s => model.colors.some(c => (c.segmentId || c.segment) === s.id));
+            selectedSegmentId = withColors[0] ? withColors[0].id : (segs[0] ? segs[0].id : '');
+            render();
+        }
+
+        function back() {
+            activeModelId = null;
+            selectedColorId = null;
+            previousColorId = null;
+            selectedSegmentId = null;
+            isCompareActive = false;
+            compareLeftColorId = null;
+            compareRightColorId = null;
+            compareTargetSide = null;
+            render();
+        }
+
+        function switchSegment(segId) {
+            selectedSegmentId = segId;
+            const model = models.find(m => m.id === activeModelId);
+            const segContainer = document.getElementById('segment-toggle-container');
+            const swatchContainer = document.getElementById('swatch-container');
+            if (segContainer && model) {
+                segContainer.innerHTML = getSegmentToggleHtml(model);
+            }
+            if (swatchContainer && model) {
+                swatchContainer.innerHTML = getSwatchesHtml(model);
+                swatchContainer.classList.remove('swatch-fade');
+                void swatchContainer.offsetWidth;
+                swatchContainer.classList.add('swatch-fade');
+            }
+        }
+
+        function selectColor(id) {
+            const model = models.find(m => m.id === activeModelId);
+            const color = model ? model.colors.find(c => c.id === id) : null;
+            if (!color) return;
+
+            if (!isCompareActive) {
+                if (selectedColorId === id) return;
+                previousColorId = selectedColorId;
+                selectedColorId = id;
+                updateOverlay(color.imageUrl);
+                updateSwatchUI();
+                syncCompareUI();
+            } else {
+                if (compareTargetSide === 'left') {
+                    if (compareLeftColorId !== id) {
+                        compareLeftColorId = id;
+                        previousColorId = id;
+                        updateSideOverlay('left', color.imageUrl);
+                    }
+                    compareTargetSide = null;
+                } else if (compareTargetSide === 'right') {
+                    if (compareRightColorId !== id) {
+                        compareRightColorId = id;
+                        selectedColorId = id;
+                        updateSideOverlay('right', color.imageUrl);
+                    }
+                    compareTargetSide = null;
+                } else {
+                    // Auto mode
+                    if (compareRightColorId === id) return;
+                    const oldRight = compareRightColorId;
+                    const oldLeft = compareLeftColorId;
+                    compareLeftColorId = oldRight;
+                    compareRightColorId = id;
+                    previousColorId = oldRight;
+                    selectedColorId = id;
+
+                    if (oldLeft !== oldRight) {
+                        const leftColor = model.colors.find(c => c.id === oldRight);
+                        updateSideOverlay('left', leftColor ? leftColor.imageUrl : null);
+                    }
+                    updateSideOverlay('right', color.imageUrl);
+                }
+                updateSwatchUI();
+                syncCompareUI();
+            }
+        }
+
+        function resetColor() {
+            selectedColorId = null;
+            previousColorId = null;
+            isCompareActive = false;
+            compareLeftColorId = null;
+            compareRightColorId = null;
+            compareTargetSide = null;
+            updateOverlay(null);
+            updateSideOverlay('left', null);
+            updateSideOverlay('right', null);
+            updateSwatchUI();
+            syncCompareUI();
+        }
+
+        function resetBeforeToOriginal() {
+            if (!isCompareActive) return;
+            if (compareLeftColorId !== null) {
+                compareLeftColorId = null;
+                previousColorId = null;
+                updateSideOverlay('left', null);
+                updateSwatchUI();
+                syncCompareUI();
+            }
+        }
+
+        function setCompareTargetSide(side) {
+            if (compareTargetSide === side) {
+                compareTargetSide = null;
+            } else {
+                compareTargetSide = side;
+            }
+            syncCompareUI();
+            updateSwatchUI();
+        }
+
+        function updateOverlay(url) {
+            const overlay = document.getElementById('overlay-layer');
+            if (!overlay) return;
+            overlay.classList.remove('visible');
+            if (!url) {
+                setTimeout(() => {
+                    if (!selectedColorId && !isCompareActive) {
+                        overlay.src = "";
+                        overlay.style.clipPath = '';
+                    }
+                }, 300);
+                return;
+            }
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                overlay.src = url;
+                overlay.style.clipPath = '';
+                overlay.classList.add('visible');
+            };
+            tempImg.src = url;
+        }
+
+        function updateSideOverlay(side, url) {
+            const overlay = document.getElementById(side === 'left' ? 'compare-left-overlay' : 'compare-right-overlay');
+            if (!overlay) return;
+            overlay.classList.remove('visible');
+            if (!url) {
+                setTimeout(() => {
+                    overlay.src = "";
+                    applySideClips();
+                }, 300);
+                return;
+            }
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                overlay.src = url;
+                applySideClips();
+                overlay.classList.add('visible');
+            };
+            tempImg.src = url;
+        }
+
+        function applySideClips() {
+            const leftOverlay = document.getElementById('compare-left-overlay');
+            const rightOverlay = document.getElementById('compare-right-overlay');
+            if (leftOverlay) {
+                leftOverlay.style.clipPath = 'polygon(0% 0%, ' + comparePos + '% 0%, ' + comparePos + '% 100%, 0% 100%)';
+            }
+            if (rightOverlay) {
+                rightOverlay.style.clipPath = 'polygon(' + comparePos + '% 0%, 100% 0%, 100% 100%, ' + comparePos + '% 100%)';
+            }
+        }
+
+        function updateSwatchUI() {
+            const model = models.find(m => m.id === activeModelId);
+            if (!model) return;
+            const swatchContainer = document.getElementById('swatch-container');
+            if (swatchContainer) {
+                swatchContainer.innerHTML = getSwatchesHtml(model);
+            }
+        }
+
+        function updateCompareRect() {
+            const baseImg = document.getElementById('base-img');
+            const stage = document.getElementById('image-stage');
+            const container = document.getElementById('compare-container');
+            if (!baseImg || !stage || !container) return;
+            const imgRect = baseImg.getBoundingClientRect();
+            const stageRect = stage.getBoundingClientRect();
+            if (imgRect.width === 0 || imgRect.height === 0) return;
+            if (!baseImg.naturalWidth || !baseImg.naturalHeight) {
+                container.style.left = (imgRect.left - stageRect.left) + 'px';
+                container.style.top = (imgRect.top - stageRect.top) + 'px';
+                container.style.width = imgRect.width + 'px';
+                container.style.height = imgRect.height + 'px';
+                return;
+            }
+            const imgRatio = baseImg.naturalWidth / baseImg.naturalHeight;
+            const elemRatio = imgRect.width / imgRect.height;
+            let rw = imgRect.width;
+            let rh = imgRect.height;
+            let ox = 0;
+            let oy = 0;
+            if (elemRatio > imgRatio) {
+                rh = imgRect.height;
+                rw = imgRect.height * imgRatio;
+                ox = (imgRect.width - rw) / 2;
+            } else {
+                rw = imgRect.width;
+                rh = imgRect.width / imgRatio;
+                oy = (imgRect.height - rh) / 2;
+            }
+            container.style.left = (imgRect.left - stageRect.left + ox) + 'px';
+            container.style.top = (imgRect.top - stageRect.top + oy) + 'px';
+            container.style.width = rw + 'px';
+            container.style.height = rh + 'px';
+        }
+
+        function setComparePosition(pct) {
+            comparePos = Math.max(0, Math.min(100, pct));
+            const divider = document.getElementById('compare-divider');
+            if (divider) {
+                divider.style.left = comparePos + '%';
+            }
+            if (isCompareActive) {
+                applySideClips();
+            }
+        }
+
+        function toggleCompare() {
+            const model = models.find(m => m.id === activeModelId);
+            if (!model || model.colors.length === 0) return;
+
+            isCompareActive = !isCompareActive;
+            if (isCompareActive) {
+                comparePos = 50;
+                compareTargetSide = null;
+                compareLeftColorId = previousColorId;
+                compareRightColorId = selectedColorId;
+                const leftColor = model.colors.find(c => c.id === compareLeftColorId);
+                const rightColor = model.colors.find(c => c.id === compareRightColorId);
+                updateSideOverlay('left', leftColor ? leftColor.imageUrl : null);
+                updateSideOverlay('right', rightColor ? rightColor.imageUrl : null);
+            } else {
+                selectedColorId = compareRightColorId;
+                if (compareLeftColorId) {
+                    previousColorId = compareLeftColorId;
+                }
+                compareTargetSide = null;
+                const rightColor = model.colors.find(c => c.id === compareRightColorId);
+                updateOverlay(rightColor ? rightColor.imageUrl : null);
+                updateSideOverlay('left', null);
+                updateSideOverlay('right', null);
+            }
+            syncCompareUI();
+            updateSwatchUI();
+        }
+
+        function syncCompareUI() {
+            const model = models.find(m => m.id === activeModelId);
+            const btn = document.getElementById('compare-btn');
+            const controls = document.getElementById('compare-controls');
+            const resetMainBtn = document.getElementById('reset-main-btn');
+            const container = document.getElementById('compare-container');
+            const overlay = document.getElementById('overlay-layer');
+            const leftOverlay = document.getElementById('compare-left-overlay');
+            const rightOverlay = document.getElementById('compare-right-overlay');
+
+            const hasColors = model && model.colors && model.colors.length > 0;
+            if (!hasColors) {
+                isCompareActive = false;
+                if (btn) btn.classList.add('hidden');
+                if (controls) controls.style.display = 'none';
+                if (container) container.style.display = 'none';
+                if (overlay) overlay.style.display = 'block';
+                if (leftOverlay) leftOverlay.style.display = 'none';
+                if (rightOverlay) rightOverlay.style.display = 'none';
+                return;
+            }
+
+            if (btn) {
+                btn.classList.remove('hidden');
+                if (isCompareActive) {
+                    btn.classList.add('text-black', 'font-bold');
+                    btn.classList.remove('text-gray-400');
+                } else {
+                    btn.classList.remove('text-black', 'font-bold');
+                    btn.classList.add('text-gray-400');
+                }
+            }
+
+            if (controls) {
+                controls.style.display = isCompareActive ? 'flex' : 'none';
+            }
+
+            const beforeSideBtn = document.getElementById('compare-side-before-btn');
+            const afterSideBtn = document.getElementById('compare-side-after-btn');
+            if (beforeSideBtn && afterSideBtn) {
+                if (compareTargetSide === 'left') {
+                    beforeSideBtn.className = "px-2.5 py-1 rounded-full transition-all bg-white text-black shadow-sm font-bold";
+                    afterSideBtn.className = "px-2.5 py-1 rounded-full transition-all text-gray-500 hover:text-black";
+                } else if (compareTargetSide === 'right') {
+                    beforeSideBtn.className = "px-2.5 py-1 rounded-full transition-all text-gray-500 hover:text-black";
+                    afterSideBtn.className = "px-2.5 py-1 rounded-full transition-all bg-white text-black shadow-sm font-bold";
+                } else {
+                    beforeSideBtn.className = "px-2.5 py-1 rounded-full transition-all text-gray-500 hover:text-black";
+                    afterSideBtn.className = "px-2.5 py-1 rounded-full transition-all text-gray-500 hover:text-black";
+                }
+            }
+
+            const labelBefore = document.getElementById('label-before');
+            const labelAfter = document.getElementById('label-after');
+            if (labelBefore && labelAfter) {
+                if (compareTargetSide === 'left') {
+                    labelBefore.className = "cursor-pointer pointer-events-auto absolute top-3 left-3 bg-white text-black ring-1 ring-black backdrop-blur-sm text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 transition-colors";
+                    labelAfter.className = "cursor-pointer pointer-events-auto absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 hover:bg-black/80 transition-colors";
+                } else if (compareTargetSide === 'right') {
+                    labelBefore.className = "cursor-pointer pointer-events-auto absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-white text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 hover:bg-black/80 transition-colors";
+                    labelAfter.className = "cursor-pointer pointer-events-auto absolute top-3 right-3 bg-white text-black ring-1 ring-black backdrop-blur-sm text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 transition-colors";
+                } else {
+                    labelBefore.className = "cursor-pointer pointer-events-auto absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-white text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 hover:bg-black/80 transition-colors";
+                    labelAfter.className = "cursor-pointer pointer-events-auto absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] sm:text-xs font-semibold uppercase px-2 py-0.5 rounded tracking-wider shadow select-none z-10 hover:bg-black/80 transition-colors";
+                }
+            }
+
+            if (container) {
+                if (isCompareActive) {
+                    container.style.display = 'block';
+                    updateCompareRect();
+                    setComparePosition(comparePos);
+                    if (overlay) overlay.style.display = 'none';
+                    if (leftOverlay) leftOverlay.style.display = 'block';
+                    if (rightOverlay) rightOverlay.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                    if (overlay) overlay.style.display = 'block';
+                    if (leftOverlay) leftOverlay.style.display = 'none';
+                    if (rightOverlay) rightOverlay.style.display = 'none';
+                }
+            }
+        }
+
+        function setupCompareEvents() {
+            const container = document.getElementById('compare-container');
+            if (!container || container.dataset.hasCompareEvents) return;
+            container.dataset.hasCompareEvents = 'true';
+            function handlePointer(clientX) {
+                const rect = container.getBoundingClientRect();
+                if (rect.width <= 0) return;
+                const relX = clientX - rect.left;
+                const pct = (relX / rect.width) * 100;
+                setComparePosition(pct);
+            }
+            container.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                try { container.setPointerCapture(e.pointerId); } catch(err) {}
+                isDraggingCompare = true;
+                handlePointer(e.clientX);
+            });
+            container.addEventListener('pointermove', (e) => {
+                if (isDraggingCompare || e.buttons === 1) {
+                    e.preventDefault();
+                    handlePointer(e.clientX);
+                }
+            });
+            const stopDrag = (e) => {
+                if (isDraggingCompare) {
+                    isDraggingCompare = false;
+                    try { container.releasePointerCapture(e.pointerId); } catch(err) {}
+                }
+            };
+            container.addEventListener('pointerup', stopDrag);
+            container.addEventListener('pointercancel', stopDrag);
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches && e.touches[0]) {
+                    e.preventDefault();
+                    isDraggingCompare = true;
+                    handlePointer(e.touches[0].clientX);
+                }
+            }, { passive: false });
+            container.addEventListener('touchmove', (e) => {
+                if (isDraggingCompare && e.touches && e.touches[0]) {
+                    e.preventDefault();
+                    handlePointer(e.touches[0].clientX);
+                }
+            }, { passive: false });
+            container.addEventListener('touchend', () => {
+                isDraggingCompare = false;
+            });
+        }
+        window.addEventListener('resize', updateCompareRect);
+        render();
+    </script>
+</body>
+</html>
